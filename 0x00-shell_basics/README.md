@@ -6,3 +6,4 @@
 5-listfilesdigitonly for Display current directory contents:Long format, with user group IDs displayed numerically , and hidden files(starting with .)
 6-firstdirectory for Create a script that creates a directory named my_first_directory in the /tmp/ directory.
 7-movethatfile for Move the file betty from /tmp/ to /tmp/my_first_directory.
+8-firstdelete for delete the file betty is in /tmp/my_first_directory.
