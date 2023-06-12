@@ -1,4 +1,5 @@
 #!/bin/bash
+#This script to update any changes on my project on github from my cli
 git add .
 git commit -m "update"
 git push
