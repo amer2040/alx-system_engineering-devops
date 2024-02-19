@@ -7,25 +7,17 @@ import sys
 
 def main():
     """main function"""
-    id = sys.argv[1]
-    url = f'https://jsonplaceholder.typicode.com/'
-    users = f'users?id={id}'
-    todos = f'todos?userId={id}'
-    done = f'{todos}&completed=true'
-    notDone = f'{todos}&completed=false'
-    userData = requests.get(f'{url}{users}').json()
-    Name = userData[0].get("name")
-    userName = userData[0].get("username")
-    todosData = requests.get(f'{url}{todos}').json()
-    todosDone = requests.get(f'{url}{done}').json()
-    doneN = len(todosDone)
-    totalN = len(todosData)
-    """Export into csv"""
-    with open(f'{id}.csv', 'w') as f:
-        for todo in todosData:
-            data = f'"{id}","{userName}","{todo.get("completed")}",'
-            data2 = f'"{todo.get("title")}"\n'
-            f.write(data+data2)
+    user_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
+    todos = requests.get(url + "todos", params={"userId": user_id}).json()
+
+    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        [writer.writerow(
+            [user_id, username, t.get("completed"), t.get("title")]
+         ) for t in todos]
 
 
 if __name__ == "__main__":

@@ -6,35 +6,18 @@ import requests
 
 def main():
     """main function"""
-    id = 1
-    data_dict = {}
+    url = "https://jsonplaceholder.typicode.com/"
+    users = requests.get(url + "users").json()
 
-    while True:
-        url = "https://jsonplaceholder.typicode.com/"
-        users = f"users?id={id}"
-        todos = f"todos?userId={id}"
-        userData = requests.get(f"{url}{users}").json()
-
-        if not userData:
-            break
-
-        userName = userData[0].get("username")
-        todosData = requests.get(f"{url}{todos}").json()
-
-        data_dict[id] = [
-            {
-                "username": userName,
-                "task": task.get("title"),
-                "completed": task.get("completed")
-            }
-            for task in todosData
-        ]
-
-        id += 1
-
-    with open("todo_all_employees.json", "w") as f:
-        json.dump(data_dict, f)
-
+    with open("todo_all_employees.json", "w") as jsonfile:
+        json.dump({
+            u.get("id"): [{
+                "task": t.get("title"),
+                "completed": t.get("completed"),
+                "username": u.get("username")
+            } for t in requests.get(url + "todos",
+                                    params={"userId": u.get("id")}).json()]
+            for u in users}, jsonfile)
 
 
 if __name__ == "__main__":
