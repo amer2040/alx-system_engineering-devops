@@ -7,18 +7,32 @@ import sys
 
 def main():
     """main function"""
-    user_id = sys.argv[1]
-    url = "https://jsonplaceholder.typicode.com/"
-    client = requests.get(url + "users/{}".format(user_id)).json()
-    username = client.get("username")
-    todos = requests.get(url + "todos", params={"userId": user_id}).json()
-
-    with open("{}.json".format(user_id), "w") as jsonfile:
-        json.dump({user_id: [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": username
-            } for t in todos]}, jsonfile)
+    id = sys.argv[1]
+    url = f"https://jsonplaceholder.typicode.com/"
+    users = f"users?id={id}"
+    todos = f"todos?userId={id}"
+    done = f"{todos}&completed=true"
+    notDone = f"{todos}&completed=false"
+    userData = requests.get(f"{url}{users}").json()
+    Name = userData[0].get("name")
+    userName = userData[0].get("username")
+    todosData = requests.get(f"{url}{todos}").json()
+    todosDone = requests.get(f"{url}{done}").json()
+    doneN = len(todosDone)
+    totalN = len(todosData)
+    """Export into json"""
+    with open(f"{id}.json", "w") as f:
+        data = {
+            id: [
+                {
+                    "task": task.get("title"),
+                    "completed": task.get("completed"),
+                    "username": userName,
+                }
+                for task in todosData
+            ]
+        }
+        json.dump(data, f)
 
 
 if __name__ == "__main__":
