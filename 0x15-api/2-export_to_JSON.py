@@ -20,5 +20,6 @@ def main():
                 "username": username
             } for t in todos]}, jsonfile)
 
+
 if __name__ == "__main__":
     main()

@@ -19,5 +19,6 @@ def main():
                                     params={"userId": u.get("id")}).json()]
             for u in users}, jsonfile)
 
+
 if __name__ == "__main__":
     main()
